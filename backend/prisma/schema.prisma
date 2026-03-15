@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  avatarUrl    String?  @map("avatar_url")
+  timezone     String   @default("UTC")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  courses       Course[]
+  tasks         Task[]
+  notes         Note[]
+  studySessions StudySession[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  name        String
+  code        String
+  instructor  String?
+  semester    String?
+  color       String   @default("#7F77DD")
+  icon        String   @default("book")
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks Task[]
+  notes Note[]
+
+  @@map("courses")
+}
+
+model Task {
+  id               String     @id @default(uuid())
+  userId           String     @map("user_id")
+  courseId         String?    @map("course_id")
+  title            String
+  description      String?
+  type             String     @default("ASSIGNMENT")
+  priority         String     @default("MEDIUM")
+  status           String     @default("PENDING")
+  difficulty       String     @default("MEDIUM")
+  dueDate          DateTime?  @map("due_date")
+  estimatedMinutes Int?       @map("estimated_minutes")
+  notes            String?
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course        Course?        @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  taskNotes     Note[]
+  studySessions StudySession[]
+
+  @@map("tasks")
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  courseId  String?  @map("course_id")
+  taskId    String?  @map("task_id")
+  title     String
+  content   String   @default("")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  task   Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@map("notes")
+}
+
+model StudySession {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  taskId          String?   @map("task_id")
+  startTime       DateTime  @map("start_time")
+  endTime         DateTime? @map("end_time")
+  durationMinutes Int?      @map("duration_minutes")
+  notes           String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task Task? @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@map("study_sessions")
+}

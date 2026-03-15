@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-outfit: 'Outfit', sans-serif;
+  --font-fira-code: 'Fira Code', monospace;
+}
+
+@layer base {
+  * { @apply border-gray-200 dark:border-gray-800; }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+    font-family: var(--font-outfit);
+  }
+  .dark body {
+    @apply bg-gray-950 text-gray-100;
+  }
+}
+
+@layer components {
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer;
+  }
+  .sidebar-item:hover {
+    @apply bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white;
+  }
+  .sidebar-item.active {
+    @apply bg-brand-50 text-brand-600 dark:bg-brand-900/30 dark:text-brand-400;
+  }
+  .card {
+    @apply bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm;
+  }
+  .input {
+    @apply w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 dark:focus:ring-brand-600 transition-all;
+  }
+  .btn-primary {
+    @apply px-4 py-2 bg-brand-400 hover:bg-brand-600 text-white rounded-xl text-sm font-medium transition-all duration-150 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl text-sm font-medium transition-all duration-150 active:scale-95;
+  }
+  .btn-ghost {
+    @apply px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-xl text-sm font-medium transition-all duration-150;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium border;
+  }
+  .section-title {
+    @apply text-lg font-semibold text-gray-900 dark:text-white;
+  }
+  .label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+.dark ::-webkit-scrollbar-thumb { background: #374151; }
+
+/* Animations */
+.animate-in { animation: fadeIn 0.2s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
