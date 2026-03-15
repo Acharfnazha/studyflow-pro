@@ -1,6 +1,5 @@
 # 🎓 StudyFlow Pro
 
-
 > A full-stack academic productivity platform for university students — manage courses, assignments, quizzes, exams, notes, and study sessions in one intelligent dashboard.
 
 ![Next.js](https://img.shields.io/badge/Next.js_14-black?logo=next.js&logoColor=white)
